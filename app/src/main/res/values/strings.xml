@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Note</string>
+    <string name="queryHint">Tìm kiếm ghi chú </string>
+    <string name="textDescrip">Mô tả</string>
 </resources>

@@ -2,4 +2,12 @@
     <string name="app_name">Note</string>
     <string name="queryHint">Tìm kiếm ghi chú </string>
     <string name="textDescrip">Mô tả</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="NoteTitle">Tiêu đề </string>
+    <string name="NoteContent">Bắt đầu soạn</string>
+    <string name="note_time">
+        6 tháng 6, 7:40
+    </string>
+
 </resources>

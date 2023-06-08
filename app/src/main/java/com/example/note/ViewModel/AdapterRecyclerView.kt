@@ -11,11 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.note.Constant.constant
 import com.example.note.Model.Notes
 import com.example.note.R
+import java.util.Calendar
+import java.util.Date
 
 class AdapterRecyclerView(private val listItem:ArrayList<Notes>):RecyclerView.Adapter<AdapterRecyclerView.ViewHolder>() {
+    var onItemClick : ((Notes) -> Unit)? = null
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val edt_title:TextView = itemView.findViewById(R.id.title_notes)
         val edt_contens:TextView = itemView.findViewById(R.id.note_content)
+        val txt_noteTime:TextView = itemView.findViewById(R.id.note_time)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,6 +39,17 @@ class AdapterRecyclerView(private val listItem:ArrayList<Notes>):RecyclerView.Ad
             constant.DEFAUL_NOTES
         }
         holder.edt_contens.text = content
+        val calender = Calendar.getInstance()
+        calender.time = Date(data.date)
+        val day = calender.get(Calendar.DAY_OF_MONTH)
+        val month = calender.get(Calendar.MONTH) + 1
+        val hour = calender.get(Calendar.HOUR)
+        val minute = calender.get(Calendar.MINUTE)
+        holder.txt_noteTime.text = "$day tháng $month, $hour:$minute"
+
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(data)
+        }
     }
 
     fun update(newList:ArrayList<Notes>){

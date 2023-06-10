@@ -1,34 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewNotes"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ScreenNewNotes.NewNotes"
+    android:orientation="vertical"
     android:background="@color/white">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fgm_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <ImageButton
+            android:id="@+id/img_btn_back"
+            android:layout_width="52dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:backgroundTint="@color/white"
+            android:scaleType="fitCenter"
+            android:src="@drawable/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/app_name" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-    </LinearLayout>
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/img_btn_undo"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:backgroundTint="@color/white"
+                android:scaleType="fitCenter"
+                android:src="@drawable/undo"
+                android:contentDescription="@string/app_name" />
+
+            <ImageButton
+                android:id="@+id/img_btn_forward"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:backgroundTint="@color/white"
+                android:scaleType="fitCenter"
+                android:src="@drawable/forward"
+                android:contentDescription="@string/app_name" />
+
+            <ImageButton
+                android:id="@+id/img_btn_tick"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:backgroundTint="@color/white"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tick"
+                android:contentDescription="@string/app_name" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/fgm_notes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="25dp"
@@ -40,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/NoteTitle"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:textSize="30sp"
             android:background="@drawable/custom_editetxt_for_addnew_notes"/>
 
@@ -58,11 +96,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/NoteContent"
             android:textSize="20sp"
-
             android:background="@drawable/custom_editetxt_for_addnew_notes"/>
-
-
     </LinearLayout>
 
 
-</FrameLayout>
+</LinearLayout>

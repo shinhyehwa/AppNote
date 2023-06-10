@@ -9,7 +9,7 @@ import androidx.room.Update
 @Dao
 interface NotesDao {
     @Insert
-    fun addNewNote(note:Notes)
+    fun addNewNote(note:Notes) : Long
 
     @Insert
     fun addNewNotes(notes:List<Notes>)
@@ -22,4 +22,7 @@ interface NotesDao {
 
     @Query("SElECT * FROM Notes")
     fun getALlNotes() : List<Notes>
+
+    @Query("SELECT * FROM Notes WHERE id = :idNotes")
+    fun getNote(idNotes:Long) : Notes
 }

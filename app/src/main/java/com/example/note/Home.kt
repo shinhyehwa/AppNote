@@ -1,37 +1,38 @@
 package com.example.note
 
-import android.app.Activity
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Note
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.note.Constant.constant
 import com.example.note.Model.Notes
+import com.example.note.ScreenNewNotes.NewNotes
 import com.example.note.ViewModel.AdapterRecyclerView
+import com.example.note.ViewModel.NotesDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.Date
 
 class Home : Fragment() {
-
+    private lateinit var noteDatabase:NotesDatabase
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var fButton: FloatingActionButton
     private lateinit var adapterRecyclerView: AdapterRecyclerView
     private lateinit var listItem:ArrayList<Notes>
+    private lateinit var listSearch : ArrayList<Notes>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         listItem = ArrayList()
-        val date  = Date().time
-        listItem.add(Notes(0,"Nội dung ôn tập","có văn bản",date))
+        noteDatabase = context?.let { NotesDatabase.getDatabase(it)}!!
+        listItem.addAll(noteDatabase.noteDao().getALlNotes())
     }
 
     override fun onCreateView(
@@ -44,6 +45,8 @@ class Home : Fragment() {
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapterRecyclerView
+
+        adapterRecyclerView.update(listItem)
         return view
     }
 
@@ -51,22 +54,63 @@ class Home : Fragment() {
         searchView = view.findViewById(R.id.search_bar)
         recyclerView = view.findViewById(R.id.list_item)
         fButton = view.findViewById(R.id.fbutton_add)
-        adapterRecyclerView = AdapterRecyclerView(listItem)
+        adapterRecyclerView = AdapterRecyclerView()
+
         adapterRecyclerView.onItemClick = {
-            showFragmentNotes()
+            showFragmentNotes(it.id)
         }
 
         fButton.setOnClickListener {
-            showFragmentNotes()
+            showFragmentNotes(0.toLong())
         }
+        searchNote()
     }
 
-    private fun showFragmentNotes(){
+    private fun showFragmentNotes(id : Long){
+        val bundle = Bundle()
+        bundle.putLong("id",id)
         val newFragment = NewNotes()
+        newFragment.arguments = bundle
         val fragmentManager = requireActivity().supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frameLayout, newFragment)
         fragmentTransaction.addToBackStack(constant.HOME_FRAGMENT)
         fragmentTransaction.commit()
+    }
+
+    private fun searchNote(){
+        listSearch = ArrayList()
+        searchView.setOnQueryTextListener(object : OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                listSearch.clear()
+                val text = newText
+                if(text != ""){
+                    for (i in listItem){
+                        if (text?.let { i.title.contains(it) } == true || text?.let {i.content.contains(it)} == true){
+                            listSearch.add(i)
+                        }
+                    }
+                    adapterRecyclerView.update(listSearch)
+                }else{
+                    listSearch.clear()
+                    adapterRecyclerView.update(listItem)
+                }
+
+                return false
+            }
+
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        listItem.clear()
+        listItem.addAll(noteDatabase.noteDao().getALlNotes())
+        adapterRecyclerView.update(listItem)
+        Log.e("onResume","onResume")
     }
 }

@@ -2,13 +2,9 @@ package com.example.note.ViewModel
 
 import android.app.Activity
 import android.content.Context
-import android.net.eap.EapSessionConfig.EapMsChapV2Config
 import android.util.Log
 import android.widget.Toast
-import com.example.note.Constant.constant
 import com.example.note.Model.Notes
-import com.example.note.NewNotes
-import com.example.note.R
 
 fun findNote(query:String, oldItem:ArrayList<Notes>, context:Context): ArrayList<Notes> {
     val listData:ArrayList<Notes> = ArrayList()

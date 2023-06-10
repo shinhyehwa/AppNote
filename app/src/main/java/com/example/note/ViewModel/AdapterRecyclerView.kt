@@ -14,7 +14,8 @@ import com.example.note.R
 import java.util.Calendar
 import java.util.Date
 
-class AdapterRecyclerView(private val listItem:ArrayList<Notes>):RecyclerView.Adapter<AdapterRecyclerView.ViewHolder>() {
+class AdapterRecyclerView():RecyclerView.Adapter<AdapterRecyclerView.ViewHolder>() {
+    var listItem: ArrayList<Notes> = ArrayList()
     var onItemClick : ((Notes) -> Unit)? = null
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val edt_title:TextView = itemView.findViewById(R.id.title_notes)
@@ -34,7 +35,9 @@ class AdapterRecyclerView(private val listItem:ArrayList<Notes>):RecyclerView.Ad
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data:Notes = listItem[position]
 
-        holder.edt_title.text = data.title
+        holder.edt_title.text = data.title.ifEmpty {
+            constant.NO_TITLE
+        }
         val content = data.content.ifEmpty {
             constant.DEFAUL_NOTES
         }

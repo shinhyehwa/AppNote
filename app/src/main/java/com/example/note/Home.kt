@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.recyclerview.widget.RecyclerView
@@ -54,14 +55,10 @@ class Home : Fragment() {
         searchView = view.findViewById(R.id.search_bar)
         recyclerView = view.findViewById(R.id.list_item)
         fButton = view.findViewById(R.id.fbutton_add)
-        adapterRecyclerView = AdapterRecyclerView()
+        adapterRecyclerView = AdapterRecyclerView(fButton, requireActivity() as AppCompatActivity)
 
         adapterRecyclerView.onItemClick = {
             showFragmentNotes(it.id)
-        }
-
-        fButton.setOnClickListener {
-            showFragmentNotes(0.toLong())
         }
         searchNote()
     }

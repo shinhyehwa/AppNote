@@ -18,7 +18,7 @@ interface NotesDao {
     fun changeNote(note: Notes)
 
     @Delete
-    fun deleteNote(notes : List<Notes>)
+    fun deleteNote(notes : Notes)
 
     @Query("SElECT * FROM Notes")
     fun getALlNotes() : List<Notes>

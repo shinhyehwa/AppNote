@@ -24,6 +24,7 @@ class AdapterRecyclerView(private val floatingActionButton: FloatingActionButton
     var onItemClick : ((Notes) -> Unit)? = null
     private var isEnable = false
     private val selectedItems = SparseBooleanArray()
+    private val database = NotesDatabase.getDatabase(activity)
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val edt_title:TextView = itemView.findViewById(R.id.title_notes)
@@ -31,7 +32,6 @@ class AdapterRecyclerView(private val floatingActionButton: FloatingActionButton
         val txt_noteTime:TextView = itemView.findViewById(R.id.note_time)
         val imageView : ImageView = itemView.findViewById(R.id.delete_checkbox)
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view:View = LayoutInflater.from(parent.context).inflate(R.layout.row_item_recy_main,parent,false)
         return ViewHolder(view)
@@ -99,13 +99,12 @@ class AdapterRecyclerView(private val floatingActionButton: FloatingActionButton
                         positionsToRemove.add(position)
                     }
                 }
-
                 for (i in positionsToRemove.indices.reversed()) {
                     val position = positionsToRemove[i]
+                    database.noteDao().deleteNote(listItem[position])
                     listItem.removeAt(position)
                     selectedItems.delete(position)
                 }
-
                 notifyDataSetChanged()
                 isEnable = false
                 floatingActionButton.setImageResource(R.drawable.baseline_add_24)

@@ -14,14 +14,3 @@ fun showTimeToNewNote(textView: TextView, date: Date = Date()){
     textView.text = "$day tháng $month, $hour:$minute"
 }
 
-fun addTextToStack(text:String, stack : ArrayDeque<String>){
-    val maxSize = 5
-    val currentSize = stack.size
-    if(maxSize - currentSize > 0){
-        stack.add(text)
-    }else{
-        stack.removeFirst()
-        stack.add(text)
-    }
-}
-

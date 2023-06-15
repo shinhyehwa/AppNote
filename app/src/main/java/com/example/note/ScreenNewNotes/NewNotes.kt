@@ -32,6 +32,8 @@ class NewNotes : Fragment() {
     private var canUndo = false
     private var canForward = false
     private var canUpdate = false
+    private var isHaveText = true
+    private var haveText = ""
     private lateinit var undoContent: ArrayDeque<String>
     private lateinit var forwardContent: ArrayDeque<String>
     private lateinit var note:Notes
@@ -113,7 +115,13 @@ class NewNotes : Fragment() {
 
     private fun changContent(){
         edt_NoteContent.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                if(isHaveText){
+                    undoContent.add(s.toString())
+                    haveText = s.toString()
+                    isHaveText = false
+                }
+            }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val text = s.toString()
@@ -121,11 +129,18 @@ class NewNotes : Fragment() {
                     undoContent.add(text)
                     canUndo = true
                 }
+
                 updateButtonStates()
             }
 
             override fun afterTextChanged(s: Editable?) {
-
+                if(s.isNullOrEmpty()){
+                    ibtn_tick.alpha = 0.5f
+                    ibtn_tick.isEnabled = false
+                }else{
+                    ibtn_tick.alpha = 1.0f
+                    ibtn_tick.isEnabled = true
+                }
             }
         })
     }
@@ -171,7 +186,14 @@ class NewNotes : Fragment() {
             }else{
                 text = undoContent.last()
             }
-            edt_NoteContent.setText(text)
+            if (!isHaveText){
+                text = haveText
+                canUndo = false
+                edt_NoteContent.setText(text)
+                undoContent.removeLast()
+            }else{
+                edt_NoteContent.setText(text)
+            }
             edt_NoteContent.setSelection(edt_NoteContent.text.length)
             canForward = true
         }

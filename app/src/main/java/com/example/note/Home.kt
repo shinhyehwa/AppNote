@@ -1,15 +1,14 @@
 package com.example.note
 
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Note
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.note.Constant.constant
@@ -18,7 +17,6 @@ import com.example.note.ScreenNewNotes.NewNotes
 import com.example.note.ViewModel.AdapterRecyclerView
 import com.example.note.ViewModel.NotesDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.Date
 
 class Home : Fragment() {
     private lateinit var noteDatabase:NotesDatabase

@@ -116,7 +116,7 @@ class NewNotes : Fragment() {
     private fun changContent(){
         edt_NoteContent.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                if(isHaveText){
+                if(idNote != 0.toLong()){
                     undoContent.add(s.toString())
                     haveText = s.toString()
                     isHaveText = false

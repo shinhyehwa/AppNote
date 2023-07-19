@@ -20,7 +20,7 @@ import java.util.Calendar
 import java.util.Date
 
 class AdapterRecyclerView(private val floatingActionButton: FloatingActionButton, private val activity: AppCompatActivity):RecyclerView.Adapter<AdapterRecyclerView.ViewHolder>() {
-    var listItem: ArrayList<Notes> = ArrayList()
+    private var listItem: ArrayList<Notes> = ArrayList()
     var onItemClick : ((Notes) -> Unit)? = null
     private var isEnable = false
     private val selectedItems = SparseBooleanArray()
@@ -94,22 +94,22 @@ class AdapterRecyclerView(private val floatingActionButton: FloatingActionButton
             if (isEnable) {
                 val positionsToRemove = ArrayList<Int>()
                 for (i in 0 until selectedItems.size()) {
-                    val position = selectedItems.keyAt(i)
-                    if (position >= 0 && position < listItem.size) {
-                        positionsToRemove.add(position)
+                    val index = selectedItems.keyAt(i)
+                    if (index >= 0 && index < listItem.size) {
+                        positionsToRemove.add(index)
                     }
                 }
                 for (i in positionsToRemove.indices.reversed()) {
-                    val position = positionsToRemove[i]
-                    database.noteDao().deleteNote(listItem[position])
-                    listItem.removeAt(position)
-                    selectedItems.delete(position)
+                    val index = positionsToRemove[i]
+                    database.noteDao().deleteNote(listItem[index])
+                    listItem.removeAt(index)
+                    selectedItems.delete(index)
                 }
                 notifyDataSetChanged()
                 isEnable = false
                 floatingActionButton.setImageResource(R.drawable.baseline_add_24)
             } else {
-                showFragmentNotes(0.toLong())
+                showFragmentNotes()
             }
         }
 
@@ -121,9 +121,9 @@ class AdapterRecyclerView(private val floatingActionButton: FloatingActionButton
         listItem.clear()
         listItem.addAll(newList)
     }
-    private fun showFragmentNotes(id : Long){
+    private fun showFragmentNotes(){
         val bundle = Bundle()
-        bundle.putLong("id",id)
+        bundle.putLong("id",0.toLong())
         val newFragment = NewNotes()
         newFragment.arguments = bundle
         val fragmentManager = activity.supportFragmentManager

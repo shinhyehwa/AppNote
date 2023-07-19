@@ -1,7 +1,6 @@
 package com.example.note
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,13 +23,12 @@ class Home : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var fButton: FloatingActionButton
     private lateinit var adapterRecyclerView: AdapterRecyclerView
-    private lateinit var listItem:ArrayList<Notes>
-    private lateinit var listSearch : ArrayList<Notes>
+    private val listItem: ArrayList<Notes> = ArrayList()
+    private lateinit var listSearch: ArrayList<Notes>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        listItem = ArrayList()
-        noteDatabase = context?.let { NotesDatabase.getDatabase(it)}!!
+        noteDatabase = context?.let { NotesDatabase.getDatabase(it) }!!
         listItem.addAll(noteDatabase.noteDao().getALlNotes())
     }
 
@@ -40,25 +38,27 @@ class Home : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
-        init(view)
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapterRecyclerView
-
-        adapterRecyclerView.update(listItem)
-        return view
-    }
-
-    private fun init(view:View) {
         searchView = view.findViewById(R.id.search_bar)
         recyclerView = view.findViewById(R.id.list_item)
         fButton = view.findViewById(R.id.fbutton_add)
+        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = layoutManager
         adapterRecyclerView = AdapterRecyclerView(fButton, requireActivity() as AppCompatActivity)
+        recyclerView.adapter = adapterRecyclerView
+        init()
 
+        return view
+    }
+
+    private fun init() {
         adapterRecyclerView.onItemClick = {
             showFragmentNotes(it.id)
         }
         searchNote()
+
+        fButton.setOnClickListener {
+            showFragmentNotes(0.toLong())
+        }
     }
 
     private fun showFragmentNotes(id : Long){
@@ -106,6 +106,5 @@ class Home : Fragment() {
         listItem.clear()
         listItem.addAll(noteDatabase.noteDao().getALlNotes())
         adapterRecyclerView.update(listItem)
-        Log.e("onResume","onResume")
     }
 }

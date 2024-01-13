@@ -6,5 +6,6 @@ class constant {
         val NO_TITLE = "Không có tiêu đề"
         val HOME_FRAGMENT = "homeFragment"
         val NAME_DATABASE = "Notes_Database"
+        val TODO_DATABASE = "ToDo_Database"
     }
 }

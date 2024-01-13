@@ -1,6 +1,7 @@
-package com.example.note
+package com.example.note.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,16 +9,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.note.Constant.constant
 import com.example.note.Model.Notes
 import com.example.note.ScreenNewNotes.NewNotes
-import com.example.note.ViewModel.AdapterRecyclerView
-import com.example.note.ViewModel.NotesDatabase
+import com.example.note.Adapter.AdapterRecyclerView
+import com.example.note.Model.NotesDatabase
+import com.example.note.R
+import com.example.note.ViewModel.FollowDataFromRoom
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class Home : Fragment() {
+    private lateinit var viewModel: FollowDataFromRoom
     private lateinit var noteDatabase:NotesDatabase
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
@@ -28,8 +34,6 @@ class Home : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        noteDatabase = context?.let { NotesDatabase.getDatabase(it) }!!
-        listItem.addAll(noteDatabase.noteDao().getALlNotes())
     }
 
     override fun onCreateView(
@@ -45,8 +49,8 @@ class Home : Fragment() {
         recyclerView.layoutManager = layoutManager
         adapterRecyclerView = AdapterRecyclerView(fButton, requireActivity() as AppCompatActivity)
         recyclerView.adapter = adapterRecyclerView
+        adapterRecyclerView.update(listItem)
         init()
-
         return view
     }
 
@@ -59,6 +63,13 @@ class Home : Fragment() {
         fButton.setOnClickListener {
             showFragmentNotes(0.toLong())
         }
+        viewModel = ViewModelProvider(this)[FollowDataFromRoom::class.java]
+
+        viewModel.allNotes.observe(viewLifecycleOwner, Observer {
+            listItem.clear()
+            listItem.addAll(it)
+            adapterRecyclerView.update(listItem)
+        })
     }
 
     private fun showFragmentNotes(id : Long){
@@ -82,15 +93,18 @@ class Home : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 listSearch.clear()
-                val text = newText
-                if(text != ""){
-                    for (i in listItem){
-                        if (text?.let { i.title.contains(it) } == true || text?.let {i.content.contains(it)} == true){
+                if (newText != "") {
+                    for (i in listItem) {
+                        if (newText?.let { i.title.contains(it) } == true || newText?.let {
+                                i.content.contains(
+                                    it
+                                )
+                            } == true) {
                             listSearch.add(i)
                         }
                     }
                     adapterRecyclerView.update(listSearch)
-                }else{
+                } else {
                     listSearch.clear()
                     adapterRecyclerView.update(listItem)
                 }
@@ -99,12 +113,5 @@ class Home : Fragment() {
             }
 
         })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        listItem.clear()
-        listItem.addAll(noteDatabase.noteDao().getALlNotes())
-        adapterRecyclerView.update(listItem)
     }
 }

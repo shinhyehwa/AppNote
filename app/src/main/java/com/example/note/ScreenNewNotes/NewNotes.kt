@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,16 +11,15 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
-import com.example.note.Home
 import com.example.note.Model.Notes
 import com.example.note.R
-import com.example.note.ViewModel.NotesDatabase
+import com.example.note.Model.NotesDatabase
 import java.util.Date
 
 class NewNotes : Fragment() {
-    private lateinit var noteDatabase:NotesDatabase
+    private lateinit var noteDatabase: NotesDatabase
     private lateinit var txt_timeNotes : TextView
     private lateinit var edt_NoteTitle : EditText
     private lateinit var edt_NoteContent : EditText
@@ -37,6 +35,7 @@ class NewNotes : Fragment() {
     private lateinit var undoContent: ArrayDeque<String>
     private lateinit var forwardContent: ArrayDeque<String>
     private lateinit var note:Notes
+    private lateinit var linearLayout: LinearLayout
     var idNote : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +57,10 @@ class NewNotes : Fragment() {
         ibtn_undo = view.findViewById(R.id.img_btn_undo)
         ibtn_forward = view.findViewById(R.id.img_btn_forward)
         ibtn_tick = view.findViewById(R.id.img_btn_tick)
+        linearLayout = view.findViewById(R.id.fragmentNewNotes)
+        linearLayout.setOnClickListener {
+
+        }
         undoContent = ArrayDeque()
         forwardContent = ArrayDeque()
 
@@ -231,12 +234,16 @@ class NewNotes : Fragment() {
             val title = edt_NoteTitle.text.toString()
             val content = edt_NoteContent.text.toString()
             if (!canUpdate){
-                idNote = noteDatabase.noteDao().addNewNote(Notes(title = title, content = content,date = date))
+                idNote = noteDatabase.noteDao().addNewNote(Notes(
+                    title = title, content = content,
+                    date = date))
                 val inputMethodManager = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
                 canUpdate = true
             }else{
-                noteDatabase.noteDao().changeNote(Notes(id = idNote,title = title, content = content, date = date))
+                noteDatabase.noteDao().changeNote(Notes(
+                    id = idNote,
+                    title = title, content = content, date = date))
                 val inputMethodManager = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
             }

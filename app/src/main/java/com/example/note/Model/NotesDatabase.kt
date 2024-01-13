@@ -1,12 +1,10 @@
-package com.example.note.ViewModel
+package com.example.note.Model
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.note.Constant.constant
-import com.example.note.Model.Notes
-import com.example.note.Model.NotesDao
 
 @Database(entities = [Notes::class], version = 1, exportSchema = false)
 abstract class NotesDatabase : RoomDatabase() {
@@ -16,7 +14,7 @@ abstract class NotesDatabase : RoomDatabase() {
         private var Instance : NotesDatabase? = null
 
         fun getDatabase(context: Context) : NotesDatabase {
-            return Instance?: synchronized(this){
+            return Instance ?: synchronized(this){
                 val instance = Room.databaseBuilder(context.applicationContext,
                     NotesDatabase::class.java,
                     constant.NAME_DATABASE
@@ -25,7 +23,7 @@ abstract class NotesDatabase : RoomDatabase() {
                     .build()
 
                 Instance = instance
-                return instance
+                instance
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.note.ViewModel
+package com.example.note.Adapter
 
 import android.os.Bundle
 import android.util.SparseBooleanArray
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.note.Constant.constant
 import com.example.note.Model.Notes
+import com.example.note.Model.NotesDatabase
 import com.example.note.R
 import com.example.note.ScreenNewNotes.NewNotes
 import com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -9,5 +9,8 @@
     <string name="note_time">
         6 tháng 6, 7:40
     </string>
+    <string name="hintToDo">nhấn enter để tạo nhiệm vụ</string>
+    <string name="textButtonDone">Hoàn thành</string>
+    <string name="titleNewTask">Danh sách các nhiệm vụ</string>
 
 </resources>

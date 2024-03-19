@@ -24,7 +24,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class Home : Fragment() {
     private lateinit var viewModel: FollowDataFromRoom
-    private lateinit var noteDatabase:NotesDatabase
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var fButton: FloatingActionButton
